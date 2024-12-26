@@ -20,7 +20,7 @@ adminRouter.post("/purchases", function (req, res) {
   });
 });
 
-adminRouter.get("/course/bulk", function (req, res) {
+adminRouter.get("/bulk", function (req, res) {
   res.json({
     message: "Purchases endpoint of user",
   });
