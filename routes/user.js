@@ -4,7 +4,7 @@ const { userModel } = require("../db");
 const bcrypt = require("bcrypt");
 const { parse } = require("dotenv");
 const jwt = require("jsonwebtoken");
-const JWT_SECRET = "knfsonfweig-iwhg";
+const { JWT_USER_SECRET } = require("../config");
 
 const userRouter = Router();
 
@@ -97,7 +97,7 @@ userRouter.post("/signin", async function (req, res) {
 
   const { email, password } = parseDataWithSuccess.data;
 
-  const user = await userModel.findOne({
+  const user = await userModel.find({
     email,
   });
 
@@ -121,7 +121,7 @@ userRouter.post("/signin", async function (req, res) {
     {
       id: user._id.toString(),
     },
-    JWT_SECRET,
+    JWT_USER_SECRET,
     {
       expiresIn: "24h",
     }
