@@ -7,6 +7,8 @@ const { courseRouter } = require("./routes/course");
 const { adminRouter } = require("./routes/admin");
 dotenv.config();
 
+app.use(express.json());
+
 app.use("/user", userRouter);
 app.use("/admin", adminRouter);
 app.use("/course", courseRouter);
