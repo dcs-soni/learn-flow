@@ -144,15 +144,41 @@ adminRouter.post("/course", adminMiddleWare, async function (req, res) {
   });
 });
 
-adminRouter.post("/purchases", function (req, res) {
+adminRouter.put("/course", adminMiddleWare, async function (req, res) {
+  const adminId = req.userId;
+
+  const { title, description, imageUrl, price, courseId } = req.body;
+
+  const course = await courseModel.updateOne(
+    {
+      _id: courseId,
+      creatorId: adminId,
+    },
+    {
+      title: title,
+      description,
+      description,
+      imageUrl: imageUrl,
+      price: price,
+    }
+  );
+
   res.json({
-    message: "Purchases endpoint of user",
+    message: "Course updated",
+    courseId: course._id,
   });
 });
 
-adminRouter.get("/bulk", function (req, res) {
+adminRouter.get("/course/bulk", adminMiddleWare, async function (req, res) {
+  const adminId = req.userId;
+
+  const courses = await courseModel.find({
+    creatorId: adminId,
+  });
+
   res.json({
-    message: "Purchases endpoint of user",
+    message: "Courses fetched",
+    courses,
   });
 });
 

@@ -1,10 +1,10 @@
 const { Router } = require("express");
 const { z } = require("zod");
-const { userModel } = require("../db");
+const { userModel, purchaseModel, courseModel } = require("../db");
 const bcrypt = require("bcrypt");
-const { parse } = require("dotenv");
 const jwt = require("jsonwebtoken");
 const { JWT_USER_SECRET } = require("../config");
+const { userMiddleware } = require("../middleware/user");
 
 const userRouter = Router();
 
@@ -97,7 +97,7 @@ userRouter.post("/signin", async function (req, res) {
 
   const { email, password } = parseDataWithSuccess.data;
 
-  const user = await userModel.find({
+  const user = await userModel.findOne({
     email,
   });
 
@@ -134,9 +134,20 @@ userRouter.post("/signin", async function (req, res) {
   });
 });
 
-userRouter.post("/purchases", function (req, res) {
+userRouter.post("/purchases", userMiddleware, async function (req, res) {
+  const userId = req.userId;
+
+  const purchases = await purchaseModel.find({
+    userId,
+  });
+
+  const coursesData = await courseModel.find({
+    _id: { $in: purchases.map((x) => x.courseId) },
+  });
+
   res.json({
-    message: "Purchases endpoint of user",
+    purchases,
+    coursesData,
   });
 });
 
