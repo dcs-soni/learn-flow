@@ -10,9 +10,9 @@ const { adminRouter } = require("./routes/admin");
 
 app.use(express.json());
 
-app.use("/user", userRouter);
-app.use("/admin", adminRouter);
-app.use("/course", courseRouter);
+app.use("/api/user", userRouter);
+app.use("/api/admin", adminRouter);
+app.use("/api/course", courseRouter);
 
 async function main() {
   await mongoose.connect(process.env.DATABASE_URL);
